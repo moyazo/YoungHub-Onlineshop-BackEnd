@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+    db:
+        container_name: 'younghub'
+        image: postgres:13-alpine
+        environment:
+            POSTGRES_USER: younghub
+            POSTGRES_DB: younghub
+            POSTGRES_PASSWORD: younghub
+        ports:
+            - 5432:5432
+        volumes:
+            - db-data:/var/lib/postgresql/data
+volumes:
+    db-data:
