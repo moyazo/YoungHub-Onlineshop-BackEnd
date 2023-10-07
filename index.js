@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const db = require('./src/models');
 const routerUser = require('./src/routes/users');
+const routerAuth = require("./src/routes/auth");
 
 const startApp = async () => {
     const app = express();
@@ -19,6 +20,7 @@ const startApp = async () => {
     );
 
     app.use('/users', routerUser);
+    app.use('/auth', routerAuth);
 
     try {
         await db.sequelize.sync({ force: false });

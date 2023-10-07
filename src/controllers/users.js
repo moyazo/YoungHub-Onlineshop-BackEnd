@@ -20,7 +20,7 @@ const getUserByEmail = async (email) => {
             ? (message = 'Usuario encontrado')
             : (message = 'No existe ningún usuario con este email');
         search = {
-            user,
+            data: user,
             message,
         };
     }
@@ -65,5 +65,6 @@ module.exports = {
     getAllUsers,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserByEmail
 };
