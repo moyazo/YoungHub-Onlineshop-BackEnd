@@ -1,0 +1,9 @@
+{
+    "development": {
+        "username": "younghub",
+        "password": "younghub",
+        "database": "younghub",
+        "host": "localhost",
+        "dialect": "postgres"
+    }
+}
