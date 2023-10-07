@@ -11,19 +11,18 @@ const getAllUsers = async () => {
 const getUserByEmail = async (email) => {
     let message = '';
     let search = {};
-    
-    if(!email) {
 
-        return message = 'Sin email no hay user que bucar :D';
-
+    if (!email) {
+        return (message = 'Sin email no hay user que bucar :D');
     } else {
-
-        let user = await User.findOne({where: {email}});
-        user ? message = 'Usuario encontrado' : message = 'No existe ningún usuario con este email';
+        let user = await User.findOne({ where: { email } });
+        user
+            ? (message = 'Usuario encontrado')
+            : (message = 'No existe ningún usuario con este email');
         search = {
             user,
-            message
-        }
+            message,
+        };
     }
 
     return search;
@@ -33,18 +32,38 @@ const getUserByEmail = async (email) => {
 const createUser = async (newUserData) => {
     const userFound = await getUserByEmail(newUserData.email);
 
-    if(typeof userFound != typeof 'string' && userFound.user != undefined){
+    if (typeof userFound != typeof 'string' && userFound.user != undefined) {
         return 'Ya existe este usuario';
-    } else if(typeof userFound != typeof 'string' && userFound.user == undefined) {
+    } else if (
+        typeof userFound != typeof 'string' &&
+        userFound.user == undefined
+    ) {
         return User.create(newUserData);
     } else {
-        
         return userFound;
     }
-    
+};
+
+// Update user
+const updateUser = async (newUserData) => {
+    return User.update(newUserData, {
+        where: {
+            email: newUserData.email,
+        },
+    });
+};
+
+const deleteUser = async (email) => {
+    return User.destroy({
+        where: {
+            email,
+        },
+    });
 };
 
 module.exports = {
     getAllUsers,
     createUser,
+    updateUser,
+    deleteUser
 };

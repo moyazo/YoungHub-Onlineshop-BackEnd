@@ -20,7 +20,6 @@ const startApp = async () => {
 
     app.use('/users', routerUser);
 
-
     try {
         await db.sequelize.sync({ force: false });
         app.listen(port, () => {
