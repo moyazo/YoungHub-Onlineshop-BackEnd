@@ -4,20 +4,31 @@ const router = require('express').Router();
 /**
  * *SIGN UP ENDPOINT*
  * *localhost:8000/auth/signup*
+ * *Sign up, needs email, password, name and username*
  * @param {Request} request
  * @param {Response} response
  * @returns {String}
  */
+
 router.post('/signup', async (req, res) => {
     try {
         const { email, password, name, username } = req.body;
-        if (!email || !password) {
-            res.status(400).json('Email o Password necesarios');
+        const authVariables = {
+            email,
+            password,
+            name,
+            username
+        };
+        if (!email || !password|| !name || !username) {
+            res.status(400).json({errorMessage: 'Datos de autenticación necesarios'});
         }
-        const authToken = await signup({ email, password, name, username });
-        res.status(200).json(authToken);
+        const authToken = await signup(authVariables);
+        if(authToken == 'Este email ya tiene usuario...') {
+            res.status(200).json({errorMessage: authToken});
+        }
+        res.status(200).json({authToken});
     } catch (error) {
-        res.status(500).json('Error al registrarse' + error.message);
+        res.status(500).json({errorMessage: error.message});
     }
 });
 /**

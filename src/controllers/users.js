@@ -9,23 +9,13 @@ const getAllUsers = async () => {
 
 // User by email
 const getUserByEmail = async (email) => {
-    let message = '';
-    let search = {};
-
-    if (!email) {
-        return (message = 'Sin email no hay user que bucar :D');
-    } else {
-        let user = await User.findOne({ where: { email } });
-        user
-            ? (message = 'Usuario encontrado')
-            : (message = 'No existe ningún usuario con este email');
-        search = {
-            data: user,
-            message,
-        };
+    // Retornamos si el email del registro está vacio
+    if(!email) {
+        return  'Email necesario...';
     }
 
-    return search;
+    // Buscamos por el email recibido, si existe retornamos
+    return  User.findOne({where:{email}});
 };
 
 // Create User
