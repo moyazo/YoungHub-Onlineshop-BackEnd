@@ -4,20 +4,31 @@ const router = require('express').Router();
 /**
  * *SIGN UP ENDPOINT*
  * *localhost:8000/auth/signup*
+ * *Sign up, needs email, password, name and username*
  * @param {Request} request
  * @param {Response} response
  * @returns {String}
  */
-router.post('/signup', async (request, response) => {
+
+router.post('/signup', async (req, res) => {
     try {
-        const { email, password, name } = request.body;
-        if (!email || !password) {
-            response.status(502).json('Email or Password not found');
+        const { email, password, name, username } = req.body;
+        const authVariables = {
+            email,
+            password,
+            name,
+            username
+        };
+        if (!email || !password|| !name || !username) {
+            res.status(400).json({errorMessage: 'Datos de autenticación necesarios'});
         }
-        const token = await signup({ email, password, name });
-        response.status(200).json(token);
+        const authToken = await signup(authVariables);
+        if(authToken == 'Este email ya tiene usuario...') {
+            res.status(200).json({errorMessage: authToken});
+        }
+        res.status(200).json({authToken});
     } catch (error) {
-        response.status(500).json('Error at Sign up' + error.message);
+        res.status(500).json({errorMessage: error.message});
     }
 });
 /**
@@ -31,7 +42,7 @@ router.post('/login', async (request, response) => {
     try {
         const { email, password } = request.body;
         if (!email || !password) {
-            response.status(502).json('Incorrect data');
+            response.status(400).json('Incorrect data');
         }
         const token = await login({ email, password });
         response.status(200).json(token);
